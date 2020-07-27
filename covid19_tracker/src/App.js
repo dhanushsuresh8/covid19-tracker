@@ -4,6 +4,8 @@ import { FormControl, Select, MenuItem, Card, CardContent, TableSortLabel } from
 import InfoBox from './components/InfoBox';
 import Map from './components/Map';
 import Table from './components/Table';
+import { sortData } from './utils/util';
+import LineGraph from './components/LineGraph';
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -23,12 +25,14 @@ function App() {
               value: country.countryInfo.iso2
             }
           ));
-          settableData(data);
-          setCountries(countries)
+          const sortedData = sortData(data);
+          settableData(sortedData);
+          setCountries(countries);
         })
     }
     getCountriesData();
   }, [])
+
 
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
@@ -92,9 +96,10 @@ function App() {
         <CardContent>
           {/*Table*/}
           <h3>Live cases by country</h3>
-          <Table />
+          <Table countries={tableData} />
           {/*Graph*/}
           <h3>WorldWide new cases</h3>
+          <LineGraph />
         </CardContent>
       </Card>
 
